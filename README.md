@@ -174,5 +174,4 @@ Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的�
 ---
 ### 附录 与第2版中项目的对应关系
 ### 参考文献
-
-![个人微信公众号，欢迎关注哈](https://gitee.com/RemainSilent/effective-java-third-edition/blob/master/公众号.jpg)
+![个人微信公众号，欢迎关注哈](/公众号.jpg)
