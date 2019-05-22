@@ -1,7 +1,7 @@
 # effective-java-third-edition
 
 ## 介绍
-Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的地方，望指正，感激不尽！（OS:如果可以的话，给个Star呗！）
+Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的地方，望指正，感激不尽！（OS：如果可以的话，给个Star呗！）
 
 > 邮箱：<a href="mailto:mingtielin@outlook.com">mingtielin@outlook.com</a>
 
