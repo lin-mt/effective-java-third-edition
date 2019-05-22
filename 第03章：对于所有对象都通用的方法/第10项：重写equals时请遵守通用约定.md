@@ -1,4 +1,4 @@
-### 第10项：重写equals时请遵守通用约定
+## 重写equals时请遵守通用约定
 &emsp;&emsp;重写equals方法看起来似乎很简单，但是有许多重写方式会导致错误，而且后果非常严重。最容易避免这类问题的办法就是不覆盖equals方法，在这种情况下，类的每个实例都只能与它自身相等。如果满足了以下任何一个条件，那就是正确的做法：
 * **类的每个实例都是唯一的。**　对于代表活动实体而不是值（value）的类来说确实如此，例如Thread。Object提供的equals实现对这些类具有完全正确的行为（The equals implementation provided by Object has exactly the right behavior for these classes）。
 

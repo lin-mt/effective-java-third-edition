@@ -1,4 +1,4 @@
-### 第11项：当重写equals方法时总要重写hashCode方法
+## 当重写equals方法时总要重写hashCode方法
 
 &emsp;&emsp;**在每个重写了equals方法的类中，也必须重写hashCode方法。** 如果你没有这么做的话，就会违反Object.hashCode的通用约定，这将让它在HashMap和HashSet等集合中无法正常运作。这里是约定的内容，摘自Onject规范：
 

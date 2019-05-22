@@ -1,4 +1,4 @@
-### 谨慎使用Stream并行
+## 谨慎使用Stream并行
 
 &emsp;&emsp;在主流语言中，在提供便于并发编程任务功能方面，Java始终处于最前沿【的位置】（Among mainstream languages, Java has always been at the forefront of providing facilities to ease the task of concurrent programming）。当Java于1996年发布时，它内置了对线程的支持，具有同步和等待/通知【的功能】（When Java was released in 1996, it had built-in support for threads, with synchronization and wait/notify）。Java 5引入了java.util.concurrent库，包含并发集合和执行器框架。 Java 7引入了fork-join包，这是一个用于并行分解（parallel decomposition）的高性能框架。Java 8引入了流，可以通过对并行方法的单个调用来并行化。用Java编写并发程序变得越来越容易，但编写正确快速的并发程序就像以前一样困难。安全性和活性违规（liveness violations ）是并发编程中的事实，并行流管道也不例外。
 

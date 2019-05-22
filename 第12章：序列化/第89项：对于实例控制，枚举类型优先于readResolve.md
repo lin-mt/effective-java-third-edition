@@ -1,4 +1,4 @@
-### 对于实例控制，枚举类型优先于readResolve
+## 对于实例控制，枚举类型优先于readResolve
 
 &emsp;&emsp;第三项讲述了*单例（singleton）*模式，并且给出了以下这个Singleton类的示例。这个类限制了对其构造器的访问，以确保永远只创建一个实例：
 

@@ -1,4 +1,4 @@
-### 谨慎返回optional
+## 谨慎返回optional
 
 &emsp;&emsp;在Java 8之前，在编写在某些情况下无法返回值的方法时，可以采用两种方法。 你可以抛出异常，也可以返回null（假设返回类型是对象引用类型）。这些方法都不完美。【出现】特殊的情况才应该保留异常（第69项），抛出异常【的成本】是很昂贵的，因为在创建异常时会捕获整个堆栈【的】跟踪【信息】。返回null没有这些缺点，但它有自己的缺点。如果方法返回null，则客户端必须包含（include【使用】）特殊的代码以处理返回null的可能性，除非程序员可以证明无法返回null。如果客户端忽略检查空返回并在某些数据结构中存储空返回值，则NullPointerException可能在将来的某个任意时间的某个位置出现问题，而该位置与出现这个问题的根源不在同一个地方【这么翻译应该是没毛病的】（a NullPointerException may result at some arbitrary time in the future, at some place in the code that has nothing to do with the problem）。
 

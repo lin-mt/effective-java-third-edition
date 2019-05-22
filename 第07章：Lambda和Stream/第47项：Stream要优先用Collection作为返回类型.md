@@ -1,4 +1,4 @@
-### Stream要优先用Collection作为返回类型
+## Stream要优先用Collection作为返回类型
 
 &emsp;&emsp;许多方法返回元素序列。 在Java 8之前，这些方法的明显返回类型是集合接口Collection，Set和List;Iterable; 和数组类型。通常，很容易决定返回哪些类型。准确来说是一个集合接口。如果该方法仅用于启用for-each循环或返回的序列无法实现某些Collection方法（通常为contains(Object)），则使用Iterable接口。如果返回的元素是基本类型值或者存在严格的性能要求，则使用数组。在Java 8中，流被添加到平台中，这使得为返回序列的方法选择恰当的返回类型的任务变得非常复杂。
 

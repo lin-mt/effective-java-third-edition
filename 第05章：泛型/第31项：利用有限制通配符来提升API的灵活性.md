@@ -1,4 +1,4 @@
-### 利用有限制通配符来提升API的灵活性
+## 利用有限制通配符来提升API的灵活性
 
 &emsp;&emsp;如28项所述，参数化类型是不可变的（invariant）。换句话说，对于任何两个截然不同的类型Type1和Type2而言，List<Type1>既不是List<Type2>的子类型，也不是它的超类型。虽然List<String>不是List<Object>的子类型，这与直觉相悖，但是实际上很有意义。你可以将任何对象放进一个List<Object>中，却只能将字符串放进List<String>中。因为List<String>不能完成List<Object>所能做的所有事情，因此它不是子类型（由Liskov替换主体，第10项）。
 

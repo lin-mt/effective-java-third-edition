@@ -1,4 +1,4 @@
-### 考虑实现Comparable接口
+## 考虑实现Comparable接口
 
 &emsp;&emsp;本章中讨论的其他方法不同，compareTo方法并没有在Object中声明。相反，它是Comparable接口中唯一的方法，它的特征与Object的equals方法类似，只是出了简单的equals比较之外，它还允许进行顺序比较，并且它是通用的。 通过实现Comparable，类表明它的实例具有自然顺序。实现Comparable的对象数组就像这样简单：
 
