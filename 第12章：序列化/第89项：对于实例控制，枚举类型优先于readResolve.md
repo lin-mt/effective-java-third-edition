@@ -12,7 +12,7 @@ public class Elvis {
 
 &emsp;&emsp;正如第3项中提到的，如果这个类的声明加上了“implements Serializable”的字样，他就不再是一个单例。无论该类是否使用了默认的序列化形式，还是自定义的序列化形式（第87项），都没关系；也跟它是否提供了显示的readObject方法（第88项）无关。任何一个readObject方法，不管是显示的还是默认的，它都返回一个新建的实例，这个新建的实例不同于该类初始化时创建的实例。
 
-&emsp;&emsp;readResolve特性允许你用readObject创建的实例代替另一个实例\[Serialization, 3.7\]。对于一个正在被反序列化的对象，如果它的类定义了一个readResolve方法，并且具备正确的声明，那么在反序列化之后，新建对象上的readResolve方法就会被调用。然后，该方法返回的对象引用将被返回，取代新建的对象。在这个特性的绝大多数用法中，指向新建对象的引用不需要再被保留，因此立即成为垃圾回收的对象。
+&emsp;&emsp;readResolve特性允许你用readObject创建的实例代替另一个实例\[Serialization, 3.7\]。对于一个正在被反序列化的对象，如果它的类定义了一个readResolve方法，并且具备正确的声明，那么在反序列化之后，新建的对象上的readResolve方法就会被调用。然后，该方法返回的对象引用将被返回，取代新建的对象。在这个特性的绝大多数用法中，指向新建的对象的引用不需要再被保留，因此立即成为垃圾回收的对象。
 
 &emsp;&emsp;如果Elvis类要实现Serializable接口，下面的readResolve方法就足以保证它的单例属性：
 
@@ -25,11 +25,11 @@ private Object readResolve() {
 }
 ```
 
-&emsp;&emsp;该方法忽略了被反序列化的对象，只返回该类初始化是创建的那个特殊的Elvis实例。因此，Elvis实例的序列化形式并不需要包含任何实际的数据；所有的实例域都应该被声明为transient的。事实上，**如果依赖readResolve进行实例控制，带有对象引用类型的所有实例域则都必须声明为transient的** 。否则，哪种有决心的攻击者就有可能在readResolve方法被运行事前，保护指向反序列化对象的引用，采用的方法类似于第88项中提到过的MutablePeriod攻击。
+&emsp;&emsp;该方法忽略了被反序列化的对象，只返回该类初始化是创建的那个特殊的Elvis实例。因此，Elvis实例的序列化形式并不需要包含任何实际的数据；所有的实例域都应该被声明为transient的。事实上，**如果依赖readResolve进行实例控制，带有对象引用类型的所有实例域则都必须声明为transient的** 。否则，那种有决心的攻击者就有可能在readResolve方法被运行前，取得指向反序列化对象的引用，采用的攻击技术类似于第88项中提到过的MutablePeriod攻击。
 
-&emsp;&emsp;这种攻击有点复杂，但是底层思想却很简单。如果Singleton包含一个非transient的对象引用域，这个域的内容就可以在Singleton的readResolve方法运行之前被反序列化。当对象引用域的内容被反序列化时，它就允许宇哥精心制作的流“盗用”指向最初被反序列化的Singleton的引用。
+&emsp;&emsp;这种攻击有点复杂，但是底层思想却很简单。如果Singleton包含一个非transient的对象引用域，这个域的内容就可以在Singleton的readResolve方法运行之前被反序列化。当对象引用域的内容被反序列化时，它就允许一个精心制作的流“盗用”指向最初被反序列化的Singleton的引用。
 
-&emsp;&emsp;以下是它更详细的工作原理。首先，编写一个“盗用者”类，它既有readResolve方法，又有实例域，实例域指向被序列化的Singleton的引用，“盗用者”类就“潜伏”在其中。在序列化流中，用“盗用者”类的实例代替Singleton的非transient域。你现在就有了一个循环：Singleton包含“盗用者”类，“盗用者”类则引用该Singleton。
+&emsp;&emsp;以下是它更详细的工作原理。首先，编写一个“盗用者(stealer)”类，它既有readResolve方法，又有实例域，实例域指向被序列化的Singleton的引用，“盗用者”类就“潜伏”在其中。在序列化流中，用“盗用者”类的实例代替Singleton的非transient域。你现在就有了一个循环：Singleton包含“盗用者”类，“盗用者”类则引用该Singleton。
 
 &emsp;&emsp;由于单例包含“盗用者”类，当这个单例被反序列化的时候，“盗用者”类的readResolve方法先运行。因此，当“盗用者”的readResolve方法运行时，它的实例域仍然引用被部分反序列化（并且也还没有被解析）的单例。
 
@@ -88,7 +88,7 @@ public class ElvisImpersonator {
 [Hound Dog, Heartbreak Hotel]
 [A Fool Such as I]
 
-&emsp;&emsp;通过将favorites域声明为transient，可以修复这个问题，但是最好把Elvis做成是一个氮元素的枚举类型（第3项）。正如ElvisStealer攻击所证明的那样，使用readResolve方法来防止攻击者访问“临时”反序列化实例是非常脆弱的，需要非常小心。
+&emsp;&emsp;通过将favorites域声明为transient，可以修复这个问题，但是最好把Elvis做成是一个单元素(single-element)的枚举类型（第3项）。正如ElvisStealer攻击所证明的那样，使用readResolve方法来防止攻击者访问“临时”反序列化实例是非常脆弱的，需要非常小心。
 
 &emsp;&emsp;如有你将你的可序列化的实例受控（instance-controlled）类编写成枚举，Java就可以保证除了所声明的常量之外，不会有别的实例，除非攻击者滥用AccessibleObject.setAccessible等特权方法。任何能够做到这一点的攻击者已经拥有足够的权限来执行任意的本机代码（native code），并且为之所做的所有努力都是没用的。以下是把我们的Elvis写成枚举的例子：
 
