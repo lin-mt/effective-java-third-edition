@@ -1,6 +1,6 @@
 ## 保护性地编写readObject方法
 
-&emsp;&emsp;第50项介绍了一个不可变的日期范围类，它包含可变的私有Date域。该类通过在其构造器和访问方法（accessor）中保护性地拷贝Date对象，极力地维护其约束条件和不可变性。下面就是这个类：
+&emsp;&emsp;第50项介绍了一个不可变的日期范围(date-range)类，它包含可变的私有的Date类型的字段。该类通过在其构造器和访问方法（accessor）中保护性地拷贝Date对象，极力地维护其约束条件和不可变性。下面就是这个类：
 
 ```java
 // Immutable class that uses defensive copying
@@ -28,11 +28,11 @@ public final class Period {
 
 &emsp;&emsp;假设你决定要把这个类做成可序列化的。因为Period对象的物理表示法正好反映了它的逻辑数据内容，所以，使用默认的序列化形式没有什么不合理的（第87项）。因此，为了使这个类成为可序列化的，似乎你所需要做的也就是在类的声明中增加“implements Serializable”字样。然而，如果你真的这样做，那么这个类将不再保证它的关键约束了。
 
-&emsp;&emsp;问题在于，readObject方法实际上相当于另一个公有的构造器，如同其他的构造器一样，它也要求注意同样的所有注意事项。构造器必须检查其参数的有效性（第49项），并且在必要的时候对参数进行保护性拷贝（第50项），同样地，readObject方法也需要这么做。如果readObject方法无法做到这两者之一，对于攻击者来说，要违反这个类的约束条件相对就比较简单了。
+&emsp;&emsp;问题在于，readObject方法实际上相当于另一个公有的构造器，如同其他的构造器一样，它也要满足所有注意事项。构造器必须检查其参数的有效性（第49项），并且在必要的时候对参数进行保护性拷贝（第50项），同样地，readObject方法也需要这么做。如果readObject方法无法做到这两者之一，对于攻击者来说，要违反这个类的约束条件相对就比较简单了。
 
-&emsp;&emsp;不严格地说，readObject是一个构造函数，它将字节流作为唯一参数。在正常使用中，字节流是通过序列化正常构造的实例生成的。当readObject面对一个人工生成的违反类的约束条件的字节流的时候，问题就出现了，它会生成一个违反类的约束条件的对象。通过这样的字节流可以用来创建一个*不可能的对象（impossible object）*，该对象无法使用普通构造函数创建。
+&emsp;&emsp;不严格地说，readObject是一个构造函数，它将字节流作为唯一参数。在正常使用中，字节流是通过序列化正常构造的实例生成的。当readObject面对一个人工生成的违反类的约束条件的字节流的时候，问题就出现了，它会生成一个违反类的约束条件的对象。通过这样的字节流可以用来创建一个无法使用普通构造函数创建的*不可能的对象（impossible object）*。
 
-&emsp;&emsp;假设我们只简单地将“implements Serializable”添加到Period的类声明中。然后，这个丑陋的程序将生成一个Period实例，它的结束时间比起始时间还要早。对高位设置的字节值的强制转换是Java缺少字节文字与不幸的决策结合而导致字节类型签名的结果：
+&emsp;&emsp;假设我们只简单地将“implements Serializable”添加到Period的类声明中。然后，这个丑陋的程序将生成一个Period实例，它的结束时间比起始时间还要早。对高位设置的字节值的强制转换是Java缺少字节文字与不幸的决策结合而导致字节类型签名的结果【下面的强转(byte)部分】：
 
 ```java
 public class BogusPeriod {
@@ -68,7 +68,7 @@ public class BogusPeriod {
 }
 ```
 
-&emsp;&emsp;被用来初始化SerializableForm的byte数组常量是这样产生的：首先对一个正常的Period实例进行序列化，然后对得到的字节流进行手工编辑。对于这个例子而言，字节流的细节并不重要A片，但是如果你很好奇的话，可以在*Java Object Serialization Specification*\[Serialization, 6\]中查到有关序列化字节流格式的描述信息。如果你运行这个程序，它就会打印出“Fri Jan 01 12:00:00 PST 1999 - Sun Jan 01 12:00:00 PST 1984”。只要把Period声明成可序列化的，就会使我们创建出违反其约束条件的对象。
+&emsp;&emsp;被用来初始化SerializableForm的byte数组常量是这样产生的：首先对一个正常的Period实例进行序列化，然后对得到的字节流进行手工编辑。对于这个例子而言，字节流的细节并不重要，但是如果你很好奇的话，可以在*Java Object Serialization Specification*\[Serialization, 6\]中查到有关序列化字节流格式的描述信息。如果你运行这个程序，它就会打印出“Fri Jan 01 12:00:00 PST 1999 - Sun Jan 01 12:00:00 PST 1984”。只要把Period声明成可序列化的，就会使我们创建出违反其约束条件的对象。
 
 &emsp;&emsp;为了修正这个问题，你可以为Period提供一个readObject方法，该方法首先调用defaultReadObject，然后检查被反序列化之后的对象的有效性。如果有效性检查失败，readObject方法就抛出一个InvalidObjectExceptio异常，防止完成序列化：
 
@@ -82,7 +82,7 @@ private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundEx
 }
 ```
 
-&emsp;&emsp;尽管这样的修正避免了攻击者创建无效的Period实例，但是，这里仍然隐藏着一个更为微妙的问题。通过伪造字节流，要想创建可变的Period实例仍然是有可能的，做法是：字节流以一个有效地Period实例开头，然后附加上两个额外的引用，指向Period实例中的两个私有的Date域。攻击者从ObjectInputStream中读取Period实例，然后读取附加在其后面的“恶意编制的对象引用”。这些对象引用使得攻击者能够访问到Period对象内部的私有Date域所引用的对象。通过改变这些Date实例，攻击者可以改变Period实例。下面的类演示了这种攻击：
+&emsp;&emsp;尽管这种修正方式避免了攻击者创建无效的Period实例，但是，这里仍然隐藏着一个更为微妙的问题。通过伪造字节流，要想创建可变的Period实例仍然是有可能的，做法是：字节流以一个有效地Period实例开头，然后附加上两个额外的引用，指向Period实例中的两个私有的Date域。攻击者从ObjectInputStream中读取Period实例，然后读取附加在其后面的“恶意编写制造的对象引用”。这些对象引用使得攻击者能够访问到Period对象内部的私有Date域所引用的对象。通过改变这些Date实例，攻击者可以改变Period实例。下面的类演示了这种攻击：
 
 ```java
 public class MutablePeriod {
