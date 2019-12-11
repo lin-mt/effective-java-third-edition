@@ -3,7 +3,11 @@
 ## 介绍
 Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的地方，望指正，感激不尽！（OS：如果可以的话，给个Star呗！）
 
-> 邮箱：<a href="mailto:lin-mt@outlook.com">lin-mt@outlook.com</a>
+## 版权声明
+
+本项目仅为个人学习交流使用，切勿作为商业用途，若将此项目作为商业用途，后果自负，与本项目无关。
+
+> 联系邮箱：<a href="mailto:lin-mt@outlook.com">lin-mt@outlook.com</a>
 
 ## 目录
 ### 推荐序
