@@ -16,7 +16,7 @@ try (Stream<String> words = new Scanner(file).tokens()) {
 }
 ```
 
-&emsp;&emsp;这段代码出了什么问题？ 毕竟，它使用流，lambdas 和方法引用，并得到正确的答案。简单地说，它根本不是流代码; 它的迭代代码伪装成流代码。它没有从流 API 中获益，并且它比相应的迭代代码更长，更难以阅读，并且可维护性更小。问题源于这样一个事实：这个代码在一个终端 forEach 操作中完成所有工作，使用一个变异外部状态的 lambda（频率表）。执行除了呈现流执行的计算结果之外的任何操作的 forEach 操作都是“代码中的坏味道”，就比如一个变异状态的 lambda。那么这段代码应该怎么样？
+&emsp;&emsp;这段代码出了什么问题？毕竟，它使用流，lambdas 和方法引用，并得到正确的答案。简单地说，它根本不是流代码; 它的迭代代码伪装成流代码。它没有从流 API 中获益，并且它比相应的迭代代码更长，更难以阅读，并且可维护性更小。问题源于这样一个事实：这个代码在一个终端 forEach 操作中完成所有工作，使用一个变异外部状态的 lambda（频率表）。执行除了呈现流执行的计算结果之外的任何操作的 forEach 操作都是“代码中的坏味道”，就比如一个变异状态的 lambda。那么这段代码应该怎么样？
 
 ```java
 // Proper use of streams to initialize a frequency table
@@ -27,11 +27,11 @@ try (Stream<String> words = new Scanner(file).tokens()) {
 }
 ```
 
-&emsp;&emsp;此代码段与前一代码相同，但正确使用了流 API。它更短更清晰。那么为什么有人会用另一种方式写呢？ 因为它使用了他们已经熟悉的工具。Java 程序员知道如何使用 for-each 循环，而 forEach 终端操作是类似的。但 forEach 操作是终端操作中最不强大的操作之一，也是最不友好的流操作。它很显然是使用了迭代，因此不适合并行化。**forEach 操作应仅用于报告流计算的结果，而不是用于执行计算。** 有时，将 forEach 用于其他目的是有意义的，例如将流计算的结果添加到预先存在的集合中。
+&emsp;&emsp;此代码段与前一代码相同，但正确使用了流 API。它更短更清晰。那么为什么有人会用另一种方式写呢？ 因为它使用了他们已经熟悉的工具。Java 程序员知道如何使用 for-each 循环，而 forEach 终端操作是类似的。但 forEach 操作是终端操作中最不强大的操作之一，也是最不友好的流操作。它很显然是使用了迭代，因此不适合并行化。**forEach 操作应仅用于报告流计算的结果，而不是用于执行计算**。有时，将 forEach 用于其他目的是有意义的，例如将流计算的结果添加到预先存在的集合中。
 
-&emsp;&emsp;改进的代码使用了一个*收集器（collector）*，这是一个新概念，你必须学习了才能使用流。Collectors API 是令人生畏的：它有三十九种方法，其中一些方法有多达五种类型参数。好消息是，你可以从这个 API 中获得大部分益处，而无需深入研究其完整的复杂性。对于初学者，你可以忽略 Collector 接口，并将收集器视为封装缩减策略的不透明对象（an opaque object that encapsulates a reduction strategy）。在这种情况下，缩减意味着将流的元素组合成单个对象。收集器生成的对象通常是一个集合（它代表名称收集器（(which accounts for the name collector））。
+&emsp;&emsp;改进的代码使用了一个*收集器（collector）*，这是一个新概念，你必须学习了才能使用流。Collectors API 是令人生畏的：它有三十九种方法，其中一些方法有多达五种类型参数。好消息是，你可以从这个 API 中获得大部分好处，而无需深入研究其完整的复杂性。对于初学者，你可以忽略 Collector 接口，并将收集器视为封装缩减策略的不透明对象（an opaque object that encapsulates a reduction strategy）。在这种情况下，缩减意味着将流的元素组合成单个对象。收集器生成的对象通常是一个集合（它代表名称收集器（(which accounts for the name collector））。
 
-&emsp;&emsp;用于将流的元素收集到真正的集合中的收集器是很简单的。有三个这样的收集器：toList（），toSet（）和 toCollection（collectionFactory）。它们分别返回一个集合，一个列表和一个程序员指定的集合类型。有了这些知识，我们可以编写一个流管道来从频率表中提取前十个列表。
+&emsp;&emsp;用于将流的元素收集到真正的集合中的收集器是很简单的。有三个这样的收集器：toList（），toSet（）和 toCollection（collectionFactory）。它们分别返回一个集合，一个列表和一个程序猿指定的集合类型。有了这些知识，我们可以编写一个流管道来从频率表中提取前十个列表。
 
 ```java
 // Pipeline to get a top-ten list of words from a frequency table
@@ -67,7 +67,7 @@ private static final Map<String, Operation> stringToEnum = Stream.of(values()).c
 Map<Artist, Album> topHits = albums.collect(toMap(Album::artist, a->a, maxBy(comparing(Album::sales))));
 ```
 
-&emsp;&emsp;请注意，比较器使用静态工厂方法 maxBy，它是从 BinaryOperator 静态导入的。此方法将 Comparator<T>转换为 BinaryOperator<T>，用于计算指定比较器隐含的最大值。在这种情况下，比较器由比较器构造方法 comparing 返回，它采用密钥提取器功能(key extractor function)Album::sales。这可能看起来有点复杂，但代码可读性很好。简而言之，它说，“将专辑流转换为 map，将每位艺术家映射到销售量最佳专辑的专辑。”这接近问题的陈述【程度】凌然感到惊讶【意思就是说这代码的意思很接近问题的描述（OS：臭不要脸）】。
+&emsp;&emsp;请注意，比较器使用静态工厂方法 maxBy，它是从 BinaryOperator 静态导入的。此方法将 Comparator<T>转换为 BinaryOperator<T>，用于计算指定比较器隐含的最大值。在这种情况下，比较器由比较器构造方法 comparing 返回，它采用密钥提取器功能(key extractor function)Album::sales。这可能看起来有点复杂，但代码可读性很好。简而言之，它说，“将专辑流转换为 map，将每位艺术家映射到销售量最佳专辑的专辑。”这接近问题的陈述【程度】令人感到惊讶【意思就是说这代码的意思很接近问题的描述（OS：臭不要脸）】。
 
 &emsp;&emsp;toMap 的三参数形式的另一个用途是产生一个收集器，当发生冲突时强制执行 last-write-wins 策略【保留最后一个冲突值】。对于许多流，结果将是不确定的，但如果映射函数可能与键关联的所有值都相同，或者它们都是可接受的，则此收集器的行为可能正是你想要的：
 
@@ -94,13 +94,13 @@ Map<String, Long> freq = words.collect(groupingBy(String::toLowerCase, counting(
 
 &emsp;&emsp;groupingBy 的第三个版本允许你指定除下游收集器之外的 map 工厂。请注意，此方法违反了标准的 telescoping 参数列表模式：mapFactory 参数位于 downStream 参数之前，而不是之后。此版本的 groupingBy 使你可以控制包含的映射以及包含的集合（This version of groupingBy gives you control over the containing map as well as the contained collections），因此，例如，你可以指定一个收集器，该收集器返回一个 value 为 TreeSet 的 TreeMap。
 
-&emsp;&emsp;groupingByConcurrent 方法提供了 groupingBy 的所有三个重载的变体。 这些变体并行高效运行并生成 ConcurrentHashMap 实例。还有一个很少使用的 grouping 的相近【的方法】叫做 partitioningBy。代替分类器方法，它接收一个谓词（predicate）并返回键为布尔值的 map。此方法有两个重载【版本】，其中一个除谓词之外还包含下游收集器。通过 counting 方法返回的收集器仅用作下游收集器。通过 count 方法直接在 Stream 上提供相同的功能，因此**没有理由说 collect(counting())（ there is never a reason to say collect(counting())）** 。此属性还有十五种收集器方法。它们包括九个方法，其名称以 summing，averaging 和 summarizing 开头（其功能在相应的基本类型流上可用）。它们还包括 reducing 方法的所有重载，以及 filter，mapping，flatMapping 和 collectingAndThen 方法。大多数程序员可以安心地忽略大多数这种方法。从设计角度来看，这些收集器代表了尝试在收集器中部分复制流的功能，以便下游收集器可以充当“迷你流（ministreams）”。
+&emsp;&emsp;groupingByConcurrent 方法提供了 groupingBy 的所有三个重载的变体。 这些变体并行高效运行并生成 ConcurrentHashMap 实例。还有一个很少使用的 grouping 的相近【的方法】叫做 partitioningBy。代替分类器方法，它接收一个谓词（predicate）并返回键为布尔值的 map。此方法有两个重载【版本】，其中一个除谓词之外还包含下游收集器。通过 counting 方法返回的收集器仅用作下游收集器。通过 count 方法直接在 Stream 上提供相同的功能，因此**没有理由说 collect(counting())（ there is never a reason to say collect(counting())）** 。此属性还有十五种收集器方法。它们包括九个方法，其名称以 summing，averaging 和 summarizing 开头（其功能在相应的基本类型流上可用）。它们还包括 reducing 方法的所有重载，以及 filter，mapping，flatMapping 和 collectingAndThen 方法。大多数程序猿可以安心地忽略大多数这种方法。从设计角度来看，这些收集器代表了尝试在收集器中部分复制流的功能，以便下游收集器可以充当“迷你流（ministreams）”。
 
 &emsp;&emsp;我们还有三种 Collectors 方法尚未提及。虽然他们在 Collectors 里面，但他们不涉及集合。前两个是 minBy 和 maxBy，它们取比较器并返回由比较器确定的流中的最小或最大元素。它们是 Stream 接口中 min 和 max 方法的小扩展【简单的实现】，是 BinaryOperator 中类似命名方法返回的二元运算符的收集器类似物。回想一下，我们在最畅销专辑的例子中使用了 BinaryOperator.maxBy。
 
-&emsp;&emsp;最后的 Collectors 方法是 join，它只对 CharSequence 实例的流进行操作，例如字符串。 在其无参数形式中，它返回一个简单地连接元素的收集器。它的一个参数形式采用名为 delimiter 的单个 CharSequence 参数，并返回一个连接流元素的收集器，在相邻元素之间插入分隔符。如果传入逗号作为分隔符，则收集器将返回逗号分隔值字符串（但请注意，如果流中的任何元素包含逗号，则字符串将不明确）。除了分隔符之外，三个参数形式还带有前缀和后缀。 生成的收集器会生成类似于打印集合时获得的字符串，例如\[came, saw, conquered\]。
+&emsp;&emsp;最后的 Collectors 方法是 join，它只对 CharSequence 实例的流进行操作，例如字符串。 在其无参数形式中，它返回一个简单地连接元素的收集器。它的一个参数形式采用名为 delimiter 的单个 CharSequence 参数，并返回一个连接流元素的收集器，在相邻元素之间插入分隔符。如果传入逗号作为分隔符，则收集器将返回逗号分隔值字符串（但请注意，如果流中的任何元素包含逗号，则字符串将不明确）。除了分隔符之外，三个参数形式还带有前缀和后缀。生成的收集器会生成类似于打印集合时获得的字符串，例如\[came, saw, conquered\]。
 
-&emsp;&emsp;总之，流管道变成的本质是无副作用的功能对象。这适用于传递给流和相关对象的几乎所有的函数对象（This applies to all of the many function objects passed to streams and related objects）。终端操作 forEach 仅应用于报告流执行的计算结果，而不是用于执行计算。为了正确使用流，你必须了解收集器。最重要的收集器工厂是 toList，toSet，toMap，groupingBy 和 join。
+&emsp;&emsp;总之，流管道编程的本质是无副作用的功能对象。这适用于传递给流和相关对象的几乎所有的函数对象（This applies to all of the many function objects passed to streams and related objects）。终端操作 forEach 仅应用于报告流执行的计算结果，而不是用于执行计算。为了正确使用流，你必须了解收集器。最重要的收集器工厂是 toList，toSet，toMap，groupingBy 和 join。
 
 > - [第 45 项：谨慎使用 Stream](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第07章：Lambda和Stream/第45项：谨慎使用Stream.md)
 > - [第 47 项：Stream 要优先用 Collection 作为返回类型](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第07章：Lambda和Stream/第47项：Stream要优先用Collection作为返回类型.md)
