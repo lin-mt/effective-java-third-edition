@@ -18,7 +18,7 @@ class Plant {
 }
 ```
 
-&emsp;&emsp;现在假设有一个 Plant 数组来表示一座花园的植物，你想要根据它们的生命周期（一年生、多年生或者两年生）进行组织之后将这些植物列出来。如果要这么做的话，需要构建三个集合，每个生命周期一个集合，并遍历整座花园，将每种植物放到相应的集合中。一些程序猿会通过将这些集合放到一个按照生命周期的序数进行索引的数组中来实现这一点。
+&emsp;&emsp;现在假设有一个 Plant 数组来表示一座花园的植物，你想要根据它们的生命周期（一年生、多年生或者两年生）进行组织之后将这些植物列出来。如果要这么做的话，需要构建三个集合，每种生命周期一个集合，并遍历整座花园，将每种植物放到相应的集合中。一些程序猿会通过将这些集合放到一个按照生命周期的序数进行索引的数组中来实现这一点。
 
 ```java
 // Using ordinal() to index into an array - DON'T DO THIS!
@@ -33,7 +33,7 @@ for (int i = 0; i < plantsByLifeCycle.length; i++) {
 }
 ```
 
-&emsp;&emsp;这种方法的确可行，但是隐藏着许多问题。因为数组不能与泛型兼容（第 28 项），程序需要进行未受检的转换，并且不能正确无误地进行编译。因为数组不知道它的索引代表着什么，你必须手工标注（label）这些索引的输出。但是这种方法最引种的问题在于，当你访问一个按照枚举的序数进行索引的数组时，使用正确的 int 值就是你的职责了，int 不能提供枚举的类型安全。你如果使用了错误的值，程序就会悄悄地完成错误的工作，如果幸运的话，会抛出 ArrayIndexOutOfBoundException 异常。
+&emsp;&emsp;这种方法的确可行，但是隐藏着许多问题。因为数组不能与泛型兼容（第 28 项），程序需要进行未受检的转换，并且不能正确无误地进行编译。因为数组不知道它的索引代表着什么，你必须手工标注（label）这些索引的输出。但是这种方法最严重的问题在于，当你访问一个按照枚举的序数进行索引的数组时，使用正确的 int 值就是你的职责了，int 不能提供枚举的类型安全。你如果使用了错误的值，程序就会悄悄地完成错误的工作，如果幸运的话，会抛出 ArrayIndexOutOfBoundException 异常。
 
 &emsp;&emsp;这有一种更好的办法可以达到同样的效果。数组实际上充当着从枚举到值的映射，因此可能还要用到 Map。更具体地说，有一种非常快速的 Map 实现专门用于枚举键，称作 java.util.EnumMap。以下就是用 EnumMap 改写后的程序：
 
@@ -47,7 +47,7 @@ for (Plant p : garden)
 System.out.println(plantsByLifeCycle);
 ```
 
-&emsp;&emsp;这段程序更简短、更清楚、也更加安全，运行速度方面可以与使用序数的程序相媲美。它没有不安全的转换；不必手动标注这些索引的输出，因为映射键知道如何将自身翻译成可打印字符串的枚举；计算数组索引时也不可能出错。EnumMap 在运行速度方面之所以能与通过序数索引的数组相媲美，是因为 EnumMap 在内部使用了这种数组。但是它对程序猿隐藏了这种实现细节集 Map 的丰富功能和累 I 型那个安全与数组的快速于一身。注意 EnumMap 构造器采用键类型的 Class 对象：这是一个有限制的类型令牌（bounded type token），它提供了运行时的泛型信息（第 33 项）。
+&emsp;&emsp;这段程序更简短、更清楚、也更加安全，运行速度方面可以与使用序数的程序相媲美。它没有不安全的转换；不必手动标注这些索引的输出，因为映射键知道如何将自身翻译成可打印字符串的枚举；计算数组索引时也不可能出错。EnumMap 在运行速度方面之所以能与通过序数索引的数组相媲美，是因为 EnumMap 在内部使用了这种数组。但是它对程序猿隐藏了这种实现细节集 Map 的丰富功能和那个使用索引安全访问的数组的快速于一身。注意 EnumMap 构造器采用键类型的 Class 对象：这是一个有限制的类型令牌（bounded type token），它提供了运行时的泛型信息（第 33 项）。
 
 &emsp;&emsp;通过使用流（stream）（第 45 项）来管理 map 可以使上面的程序更加简短。这是最简单的基于流的代码，它很大程度上复制了前一个示例的行为：
 
@@ -65,7 +65,7 @@ System.out.println(Arrays.stream(garden).collect(groupingBy(p -> p.lifeCycle, ()
 
 &emsp;&emsp;在这种像小玩具的程序中不值得做这种优化，但在一个大量使用 map 的程序中可能是至关重要的。
 
-&emsp;&emsp;基于流的版本的行为与 EmumMap 版本的行为略有不同。EnumMap 版本始终为植物的每种生命周期创建一个嵌套映射，而基于流的版本仅在花园中具有该生命周期的一个或多种植物时才生成嵌套映射。因此，例如，如果花园中包含年度和多年生，但没有两年生，则 plantsByLifeCycle 的大小在 EnumMap 版本中将是三个【plantsByLifeCycle.size() = 3】，而在两个基于流的版本中为两个【plantsByLifeCycle.size() = 2】。
+&emsp;&emsp;基于流的版本的行为与 EmumMap 版本的行为略有不同。EnumMap 版本始终为植物的每种生命周期创建一个嵌套映射，而基于流的版本仅在花园中具有该生命周期的一个或多种植物时才生成嵌套映射。因此，例如，如果花园中包含一年生和多年生，但没有两年生，则 plantsByLifeCycle 的大小在 EnumMap 版本中将是三个【plantsByLifeCycle.size() = 3】，而在两个基于流的版本中为两个【plantsByLifeCycle.size() = 2】。
 
 &emsp;&emsp;你还可能见到按照序数进行索引（两次【索引】）的数组的数组，该序数表示两个枚举值的映射。例如，下面这个程序就是使用这样一个数组将两个阶段映射到一个 phase 转换中（从液体到固体称作凝固，从液体到气体称作沸腾，诸如此类）。
 
@@ -116,7 +116,7 @@ public enum Phase {
 }
 ```
 
-&emsp;&emsp;初始化 phase 转换的 map 的代码看起来可能有点复杂。map 的类型为 Map<Phase, Map<Phase, Transition>>，which means “map from (source) phase to map from (destination) phase to transition.” 【这就不翻译了，费劲！反正就是对这个 Map<Phase, Map<Phase, Transition>>的解释，懂的人自然懂！】这个映射 map 使用级联序列初始化两个 collector。第一个 collector 根据 phase 的起点对转换进行分组，第二个 collector 创建一个 EnumMap，其中包含从目标 phase 到转换的映射。第二个 collector 中的合并函数((x,y) -> y)并未使用；这是必需的，因为我们需要指定一个 Map 工厂才能获得 EnumMap，而 Collectors 提供了可扩展的工厂（telescoping factories）。本书的前一版使用显示迭代来初始化 phase 转换 map。代码更冗长，但可以说更容易理解。
+&emsp;&emsp;初始化 phase 转换的 map 的代码看起来可能有点复杂。map 的类型为 Map<Phase, Map<Phase, Transition>>，which means “map from (source) phase to map from (destination) phase to transition.” 【这就不翻译了，费劲！是对 Map<Phase, Map<Phase, Transition>>的解释】这个映射 map 使用级联序列初始化两个 collector。第一个 collector 根据 phase 的起点对转换进行分组，第二个 collector 创建一个 EnumMap，其中包含从目标 phase 到转换的映射。第二个 collector 中的合并函数((x,y) -> y)并未使用；这是必需的，因为我们需要指定一个 Map 工厂才能获得 EnumMap，而 Collectors 提供了可扩展的工厂（telescoping factories）。本书的前一版使用显式迭代来初始化 phase 转换 map。代码更冗长，但可以说更容易理解。
 
 附前一版代码（原书没有，我加的）：
 
@@ -168,7 +168,7 @@ public enum Phase {
 
 &emsp;&emsp;为了简洁起见，上述示例使用 null 来表示不存在状态变化（其中往返是相同的）。这不是一个好习惯，很可能在运行时导致 NullPointerException 异常。为这个问题设计一个干净，优雅的解决方案是非常棘手的，并且生成的程序足够长，以至于它们会减损此项目中的主要成本。
 
-&emsp;&emsp;总而言之，**最好不要用序数来索引数组，而要使用 EnumMap。** 如果你所表示的这种关系是多维的，就使用 EnumMap<..., EnumMap<...>>。应用程序的程序猿在一般情况下都不适用 Enum.ordinal，即使要用也很少，因此这是一种特殊情况（第 35 项）
+&emsp;&emsp;总而言之，**最好不要用序数来索引数组，而要使用 EnumMap**。如果你所表示的这种关系是多维的，就使用 EnumMap<..., EnumMap<...>>。应用程序的程序猿在一般情况下都不适用 Enum.ordinal，即使要用也很少，因此这是一种特殊情况（第 35 项）
 
 > - [第 36 项：用 EnumSet 代替位域](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第06章：枚举和注解/第36项：用EnumSet代替位域.md)
 > - [第 38 项：用接口模拟可扩展的枚举](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第06章：枚举和注解/第38项：用接口模拟可扩展的枚举.md)
