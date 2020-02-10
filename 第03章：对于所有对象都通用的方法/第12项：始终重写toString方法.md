@@ -65,5 +65,5 @@ Assertion failure: expected {abc, 123}, but was {abc, 123}.
 
 &emsp;&emsp;回顾一下，在你编写的每个可实例化的类中重写 Object 的 toString 实现，除非超类已经这样做了。 它使类的使用更加愉快，并有助于调试。toString 方法应该以美学上令人愉悦的格式返回对象的简明有用的描述（The toString method should return a concise, useful description of the object, in an aesthetically pleasing format）。
 
-> - [第 11 项：当重写 equals 方法时总要重写 hashCode 方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第11项：当重写equals方法时总要重写hashCode方法.md)
+> - [第 11 项：当重写 equals 方法时也要重写 hashCode 方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第11项：当重写equals方法时也要重写hashCode方法.md)
 > - [第 13 项：谨慎地重写 clone 方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第13项：谨慎地重写clone方法.md)
