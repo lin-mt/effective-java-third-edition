@@ -88,4 +88,4 @@ static String firstLineOfFile(String path, String defaultVal) {
 &emsp;&emsp;这里经验教训是很明确的(The lesson is clear)：在处理必须关闭的资源时，相比于 try-finally，始终优先使用 try-with-resources。 生成的代码更短更清晰，它生成的异常更有用。 try-with-resources 语句可以在使用必须关闭的资源的同同时轻松编写正确的代码，使用 try-finally 几乎是不可能的。
 
 > - [第 8 项：避免使用终结方法和清除方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第8项：避免使用终结方法和清空方法.md)
-> - [第 10 项：覆盖 equals 时请遵守通用约定](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/重写equals时请遵守通用约定.md)
+> - [第 10 项：覆盖 equals 时请遵守通用约定](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第10项：重写equals时请遵守通用约定.md)

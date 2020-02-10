@@ -336,4 +336,4 @@ public boolean equals(MyClass o) {
 &emsp;&emsp;总之，不要重写 equals 方法，除非您不得不这么做：在许多情况下，从 Object 继承的实现完全符合您的要求。 如果你确实重写了 equals，请确保比较所有类的关键字段，并使用之前提到的五个诀窍对它进行测试（If you do override equals, make sure to compare all of the class’s significant fields and to compare them in a manner that preserves all five provisions of the equals contract）。
 
 > - [第 9 项：try-with-resources 优先于 try-finally](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第9项：try-with-resources优先于try-finally.md)
-> - [第 11 项：当重写 equals 方法时总要重写 hashCode 方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第11项：当重写equals方法时总要重写hashCode方法.md)
+> - [第 11 项：当重写 equals 方法时总要重写 hashCode 方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第11项：当重写equals方法是始终重写hashCode方法.md)

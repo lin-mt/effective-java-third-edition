@@ -106,5 +106,5 @@ private int hashCode; // Automatically initialized to 0
 
 &emsp;&emsp;总之，每次覆盖 equals 时都必须覆盖 hashCode，否则程序将无法正常运行。 您的 hashCode 方法必须遵守 Object 中指定的规定，并且必须合理地将不相等的哈希代码分配给不相等的实例。如果觉得有点单调乏味，就使用第 51 页【原书本】的方式，这很容易实现。如第 10 项所述，AutoValue 框架提供了手动编写 equals 和 hashCode 方法的详细替代方案，IDE 也提供了一些此功能。
 
-> - [第 10 项：覆盖 equals 时请遵守通用约定](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/重写equals时请遵守通用约定.md)
+> - [第 10 项：覆盖 equals 时请遵守通用约定](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第10项：重写equals时请遵守通用约定.md)
 > - [第 12 项：始终重写 toString 方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法/第12项：始终重写toString方法.md)
