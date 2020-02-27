@@ -33,7 +33,7 @@ Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的�
 > - [第 5 项：优先考虑依赖注入来引用资源](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第5项：固定资源首选使用依赖注入.md)
 > - [第 6 项：避免创建不必要的对象](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第6项：避免创建不需要的对象.md)
 > - [第 7 项：消除过期的对象引用](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第7项：清除过期对象的引用.md)
-> - [第 8 项：避免使用终结方法和清除方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第8项：避免使用终结方法和清空方法.md)
+> - [第 8 项：避免使用终结方法和清理方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第8项：避免使用终结方法和清理方法.md)
 > - [第 9 项：try-with-resources 优先于 try-finally](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第02章：创建和销毁对象/第9项：try-with-resources优先于try-finally.md)
 
 ### [第三章 对于所有对象都通用的方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第03章：对于所有对象都通用的方法)
