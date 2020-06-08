@@ -1,4 +1,4 @@
-### 第 9 项：第 9 项：try-with-resources 优先于 try-finally
+### 第 9 项：try-with-resources 优先于 try-finally
 
 &emsp;&emsp;Java 库包含许多必须通过调用 close 方法手动关闭的资源。示例包括 InputStream，OutputStream 和 java.sql.Connection。关闭资源经常被客户忽视，可预见的可怕性能后果。虽然其中许多资源使用终结方法作为安全网，但终结方法不能很好地工作(第 8 项)。
 
