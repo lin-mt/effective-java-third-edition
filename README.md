@@ -12,6 +12,11 @@ Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的�
 
 > 联系邮箱：<a href="mailto:lin-mt@outlook.com">lin-mt@outlook.com</a>
 
+> 关注公众号回复：EF3 
+> 获取下载 PDF 链接
+
+<img src="./公众号.png" width="50%" height="50%" align="center" />
+
 ## 目录
 
 ### 推荐序
@@ -168,7 +173,3 @@ Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的�
 > - [第 88 项：保护性地编写 readObject 方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第12章：序列化/第88项：保护性地编写readObject方法.md)
 > - [第 89 项：对于实例控制，枚举类型优先于 readResolve](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第12章：序列化/第89项：对于实例控制，枚举类型优先于readResolve.md)
 > - [第 90 项：考虑用序列化代理代替序列化实例](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第12章：序列化/第90项：考虑用序列化代理代替序列化实例.md)
-
-> 关注公众号回复：EF3 获取下载 PDF 链接
-
-<img src="./公众号.png" width="50%" height="50%" align="center" />
