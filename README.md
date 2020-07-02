@@ -15,7 +15,7 @@ Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的�
 > 关注公众号回复：EF3 
 > 获取下载 PDF 链接
 
-<img src="./公众号.png" width="50%" height="50%" align="center" />
+<img src="./公众号.bmp" width="50%" height="50%" align="center"/>
 
 ## 目录
 
