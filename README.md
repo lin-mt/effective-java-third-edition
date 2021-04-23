@@ -79,7 +79,7 @@ Effective Java 第三版全文翻译，纯属个人业余翻译，不合理的�
 > - [第 29 项：优先考虑泛型](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第05章：泛型/第29项：优先考虑泛型.md)
 > - [第 30 项：优先考虑泛型方法](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第05章：泛型/第30项：优先考虑泛型方法.md)
 > - [第 31 项：利用有限制通配符来提升 API 的灵活性](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第05章：泛型/第31项：利用有限制通配符来提升API的灵活性.md)
-> - [第 32 项：谨慎并用泛型和可变参数](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第05章：泛型/第32项：明智地结合泛型和可变参数.md)
+> - [第 32 项：谨慎地结合泛型和可变参数](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第05章：泛型/第32项：谨慎地结合泛型和可变参数.md)
 > - [第 33 项：优先考虑类型安全的异构容器](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第05章：泛型/第33项：优先考虑类型安全的异构容器.md)
 
 ### [第六章 枚举和注解](https://gitee.com/lin-mt/effective-java-third-edition/blob/master/第06章：枚举和注解)
